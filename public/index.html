@@ -1,0 +1,1975 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escape School</title>
+
+<style>
+    
+:root {
+    --rojo: #b51f2b;
+    --rojo-oscuro: #690e18;
+    --fondo: #09090d;
+    --panel: rgba(18, 18, 25, 0.96);
+    --blanco: #f5f5f5;
+    --gris: #b9b9c4;
+    --verde: #5cdb94;
+    --amarillo: #f2c45c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--blanco);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+    font: inherit;
+}
+
+.pantalla {
+    display: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+}
+
+.pantalla.activa {
+    display: flex;
+}
+
+/* MENU PRINCIPAL */
+
+#menu-principal {
+    text-align: center;
+    flex-direction: column;
+    background:
+        linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.88)),
+        url("imagenes/menu.jpg") center / cover no-repeat;
+}
+
+.titulo-principal {
+    font-size: clamp(48px, 10vw, 100px);
+    letter-spacing: 7px;
+    margin: 0 0 12px;
+    text-shadow: 0 0 25px #000, 0 0 30px #8d111b;
+}
+
+.subtitulo {
+    color: #ddd;
+    letter-spacing: 4px;
+    font-size: clamp(12px, 2vw, 17px);
+    margin-bottom: 40px;
+}
+
+.etiqueta {
+    color: #e85a65;
+    letter-spacing: 3px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.boton {
+    border: 1px solid #e04a56;
+    background: var(--rojo-oscuro);
+    color: white;
+    padding: 16px 24px;
+    min-height: 50px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: .2s;
+    border-radius: 4px;
+}
+
+.boton:hover {
+    background: var(--rojo);
+    box-shadow: 0 0 20px #b51f2b66;
+    transform: translateY(-2px);
+}
+
+.boton:focus-visible,
+.opcion:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 3px;
+}
+
+.boton-secundario {
+    background: #22222a;
+    border-color: #555563;
+}
+
+.boton-secundario:hover {
+    background: #363641;
+}
+
+/* HISTORIA */
+
+#historia {
+    text-align: center;
+    background:
+        linear-gradient(rgba(0,0,0,.94), rgba(15,0,4,.98)),
+        url("imagenes/menu.jpg") center / cover no-repeat;
+}
+
+.contenido-historia {
+    width: 100%;
+    max-width: 760px;
+    animation: aparecer 1s ease;
+}
+
+.contenido-historia h2 {
+    font-size: clamp(30px, 6vw, 55px);
+    color: #d83240;
+    margin: 20px 0;
+}
+
+.historia-texto {
+    color: #ddd;
+    line-height: 1.9;
+    font-size: clamp(16px, 2.5vw, 19px);
+}
+
+#boton-partida {
+    display: none;
+    margin: 30px auto 0;
+}
+
+/* JUEGO */
+
+#pantalla-juego {
+    background:
+        radial-gradient(ellipse at top, #241016 0%, #0b0b10 55%);
+}
+
+.contenedor-juego {
+    width: 100%;
+    max-width: 850px;
+}
+
+.encabezado-juego {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.marca {
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 20px;
+}
+
+.marca span {
+    color: #e83b49;
+}
+
+.estadisticas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.estadistica {
+    background: #191920;
+    border: 1px solid #363640;
+    padding: 10px 13px;
+    border-radius: 5px;
+    font-size: 13px;
+    color: var(--gris);
+}
+
+.estadistica strong {
+    color: white;
+    margin-left: 5px;
+}
+
+.progreso-contenedor {
+    width: 100%;
+    height: 6px;
+    background: #282830;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+#barra-progreso {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #78111b, #f04b57);
+    transition: width .3s;
+}
+
+.tarjeta-pregunta {
+    background: var(--panel);
+    border: 1px solid #34343e;
+    border-radius: 9px;
+    padding: clamp(20px, 5vw, 38px);
+    box-shadow: 0 15px 45px #0005;
+}
+
+#numero-pregunta {
+    color: #e45a65;
+    font-size: 12px;
+    letter-spacing: 3px;
+    margin: 0 0 18px;
+}
+
+#texto-pregunta {
+    font-size: clamp(21px, 4vw, 30px);
+    line-height: 1.5;
+    margin: 0 0 25px;
+}
+
+.opciones {
+    display: grid;
+    gap: 12px;
+}
+
+.opcion {
+    width: 100%;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    text-align: left;
+    color: #e8e8ee;
+    background: #17171f;
+    border: 1px solid #3b3b47;
+    padding: 17px;
+    border-radius: 6px;
+    cursor: pointer;
+    line-height: 1.6;
+    transition: .2s;
+}
+
+.opcion:hover:not(:disabled) {
+    background: #29202a;
+    border-color: #bd3a47;
+}
+
+.letra-opcion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 30px;
+    border: 1px solid #626270;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.opcion:disabled {
+    cursor: default;
+    opacity: 1;
+}
+
+.opcion.seleccionada-10 {
+    border-color: var(--verde);
+    background: #10291d;
+}
+
+.opcion.seleccionada-5 {
+    border-color: var(--amarillo);
+    background: #302715;
+}
+
+.opcion.seleccionada-0 {
+    border-color: #f05260;
+    background: #321519;
+}
+
+#mensaje-respuesta {
+    display: none;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+    line-height: 1.6;
+}
+
+#mensaje-respuesta.visible {
+    display: block;
+}
+
+#mensaje-respuesta.correcta {
+    background: #10291d;
+    border: 1px solid #357b53;
+}
+
+#mensaje-respuesta.parcial {
+    background: #302715;
+    border: 1px solid #9b792f;
+}
+
+#mensaje-respuesta.incorrecta {
+    background: #321519;
+    border: 1px solid #96313d;
+}
+
+#explicacion-respuesta {
+    color: #ddd;
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.pie-pregunta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+#boton-siguiente {
+    display: none;
+    margin-left: auto;
+}
+
+#ayuda-errores {
+    color: #a9a9b6;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* VICTORIA Y DERROTA */
+
+#pantalla-derrota,
+#pantalla-victoria {
+    text-align: center;
+    background:
+        linear-gradient(rgba(0,0,0,.87), rgba(0,0,0,.97)),
+        url("imagenes/menu.jpg") center / cover no-repeat;
+}
+
+.contenido-final {
+    width: 100%;
+    max-width: 650px;
+    animation: aparecer 1s ease;
+}
+
+.contenido-final h2 {
+    font-size: clamp(34px, 7vw, 64px);
+    margin: 20px 0;
+}
+
+#pantalla-derrota h2 {
+    color: #f04451;
+    text-shadow: 0 0 20px #b51f2b77;
+}
+
+#pantalla-victoria h2 {
+    color: var(--verde);
+    text-shadow: 0 0 20px #5cdb9477;
+}
+
+.texto-final {
+    color: #ddd;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.resultado-final {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 25px 0;
+}
+
+#cuenta-derrota {
+    color: #f27a83;
+    margin: 25px 0;
+}
+
+#boton-reintentar,
+#boton-victoria {
+    display: none;
+    margin: 20px auto 0;
+}
+
+.botones-finales {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 550px) {
+    .pantalla {
+        padding: 16px;
+    }
+
+    .titulo-principal {
+        letter-spacing: 3px;
+    }
+
+    .encabezado-juego {
+        align-items: flex-start;
+    }
+
+    .estadisticas {
+        width: 100%;
+    }
+
+    .estadistica {
+        flex: 1;
+        text-align: center;
+    }
+
+    .tarjeta-pregunta {
+        padding: 19px;
+    }
+
+    .opcion {
+        padding: 13px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+/* SALA DE ESPERA */
+
+.contenido-sala {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    background: var(--panel);
+    border: 1px solid #34343e;
+    border-radius: 9px;
+    padding: 30px;
+}
+
+.contenido-sala h2 {
+    color: #d83240;
+}
+
+#nombre-jugador {
+    width: 100%;
+    padding: 14px;
+    margin: 15px 0;
+    background: #17171f;
+    border: 1px solid #555563;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+}
+
+#lista-jugadores {
+    list-style: none;
+    padding: 0;
+}
+
+#lista-jugadores li {
+    background: #22222a;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #444;
+}
+
+#estado-sala {
+    color: var(--gris);
+    margin-top: 20px;
+}
+/* SALA DE ESPERA */
+
+.contenido-sala {
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+    background: var(--panel);
+    border: 1px solid #34343e;
+    border-radius: 9px;
+    padding: 30px;
+}
+
+.contenido-sala h2 {
+    color: #d83240;
+}
+
+#nombre-jugador {
+    width: 100%;
+    padding: 14px;
+    margin: 15px 0;
+    background: #17171f;
+    border: 1px solid #555563;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+}
+
+#seleccion-personajes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+    max-height: 450px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.tarjeta-personaje {
+    background: #17171f;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    color: white;
+    transition: 0.2s;
+}
+
+.tarjeta-personaje:hover {
+    border-color: #b51f2b;
+    transform: scale(1.03);
+}
+
+.tarjeta-personaje.seleccionado {
+    border-color: #e32636;
+    background: #42151b;
+    box-shadow: 0 0 12px #b51f2b;
+}
+
+.tarjeta-personaje img {
+    width: 100%;
+    height: 130px;
+    object-fit: contain;
+}
+/* PERSONAJES OCUPADOS */
+.tarjeta-personaje {
+    position: relative;
+    overflow: hidden;
+}
+
+.tarjeta-personaje.ocupado::after {
+    content: "X";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(120, 0, 0, 0.65);
+    color: #ff1f1f;
+    font-size: 85px;
+    font-weight: 900;
+    text-shadow: 0 0 15px #ff0000;
+    pointer-events: none;
+}
+.tarjeta-personaje p {
+    margin: 8px 0 0;
+    font-weight: bold;
+}
+
+#personaje-elegido {
+    color: #e32636;
+    margin: 10px 0;
+}
+
+#lista-jugadores {
+    list-style: none;
+    padding: 0;
+}
+
+#lista-jugadores li {
+    background: #22222a;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #444;
+}
+
+#estado-sala {
+    color: var(--gris);
+    margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+    .contenido-sala {
+        padding: 15px;
+    }
+
+    #seleccion-personajes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+/* JUGADORES Y SUS PERSONAJES */
+
+.jugador-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #22222a;
+    padding: 8px 12px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #444;
+    text-align: left;
+}
+
+.jugador-item img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    background: #17171f;
+    border-radius: 5px;
+    border: 1px solid #555;
+}
+
+.jugador-item span {
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+.contenedor-botones-historia {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+/* Tarjeta individual de progreso */
+.progreso-jugador {
+    background: rgba(18, 18, 25, 0.95);
+    border: 1px solid #690e18;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    color: white;
+}
+
+/* Nombre del jugador */
+.progreso-jugador h3 {
+    color: #ff4757;
+    margin-bottom: 10px;
+}
+
+/* Barra de progreso */
+.barra-progreso-jugador {
+    width: 100%;
+    height: 12px;
+    background: #292929;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+/* Avance de las preguntas */
+.barra-progreso-jugador div {
+    height: 100%;
+    background: #b51f2b;
+    border-radius: 10px;
+    transition: width 0.4s ease;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MENU PRINCIPAL -->
+
+<section class="pantalla activa" id="menu-principal">
+    <p class="etiqueta">Una experiencia de terror educativo</p>
+    <h1 class="titulo-principal">ESCAPE SCHOOL</h1>
+    <p class="subtitulo">15 PREGUNTAS · UNA SOLA SALIDA</p>
+
+    <button class="boton" onclick="mostrarHistoria()">
+        INICIAR JUEGO
+    </button>
+    
+</section>
+
+<!-- HISTORIA -->
+
+<section class="pantalla" id="historia">
+    <div class="contenido-historia">
+        <p class="etiqueta">Expediente 001 · Escuela abandonada</p>
+        <h2>LA ESCUELA ABANDONADA</h2>
+
+        <div class="historia-texto">
+            <p>
+                 Están atrapados en un escape room ambientado en una escuela
+            que oculta un terrible secreto.
+            </p>
+
+            <p>
+                Deberas encontrar la manera de escapar de este
+            lugar poseído por el fantasma de una persona que murió entre
+            sus paredes y que ahora ha regresado para cobrar venganza.
+            </p>
+
+            <p>
+                Esta noche, las puertas se han cerrado detrás de ti.
+                Para escapar tendrás que responder 15 preguntas sobre
+                Gestión Académica y Pedagógica.
+            </p>
+
+            <p>
+                <strong>Necesitas al menos 100 puntos para escapar.</strong>
+                Piensa bien antes de responder.
+            </p>
+        </div>
+
+        <button
+            class="boton"
+            id="boton-partida"
+            onclick="entrarSala()">
+            INICIAR PARTIDA
+        </button>
+        
+    </div>
+</section>
+<!-- SALA DE ESPERA -->
+
+<!-- SALA DE ESPERA -->
+
+<section class="pantalla" id="sala-espera">
+
+    <div class="contenido-sala">
+
+        <p class="etiqueta">Escape School cooperativo</p>
+
+        <h2>SALA DE ESPERA</h2>
+
+        <form id="formulario-ingreso">
+
+            <label for="nombre-jugador">
+                Escribe tu nombre:
+            </label>
+
+            <input
+                type="text"
+                id="nombre-jugador"
+                placeholder="Tu nombre..."
+                maxlength="20"
+                required
+            >
+
+            <button class="boton" type="submit">
+                ENTRAR A LA SALA
+            </button>
+        </form>
+
+        <button
+            type="button"
+            class="boton"
+            id="boton-iniciar-juego"
+            style="display: none;"
+            onclick="iniciarJuego()">
+            COMENZAR JUEGO
+        </button>
+
+        <h3>ESCOGE TU PERSONAJE</h3>
+
+        <div id="seleccion-personajes"></div>
+
+        <p id="personaje-elegido">
+            Selecciona un personaje.
+        </p>
+
+        <h3>JUGADORES CONECTADOS</h3>
+<div id="informacion-anfitrion">
+
+    <p>👑 ANFITRIÓN ACTUAL</p>
+
+    <h3 id="nombre-anfitrion">
+        Esperando anfitrión...
+    </h3>
+
+</div>
+        <ul id="lista-jugadores"></ul>
+
+        <p id="estado-sala">
+            Esperando jugadores...
+        </p>
+
+    </div>
+
+</section>
+<!-- PANTALLA DE PREGUNTAS -->
+
+<section class="pantalla" id="pantalla-juego">
+    <div class="contenedor-juego">
+
+        <div class="encabezado-juego">
+            <div class="marca">ESCAPE <span>SCHOOL</span></div>
+
+            <div class="estadisticas">
+                <div class="estadistica">
+                    Puntos <strong id="marcador-puntos">0</strong>
+                </div>
+                <div class="estadistica">
+                    Errores <strong id="marcador-errores">0/5</strong>
+                </div>
+                <div class="estadistica">
+                    Pregunta <strong id="marcador-numero">1/15</strong>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="progreso-contenedor"
+            role="progressbar"
+            aria-label="Progreso del juego"
+            aria-valuemin="0"
+            aria-valuemax="15"
+            aria-valuenow="0"
+            id="progreso-accesible">
+            <div id="barra-progreso"></div>
+        </div>
+
+        <div class="tarjeta-pregunta">
+            <p id="numero-pregunta">EXPEDIENTE 001 · PREGUNTA 01</p>
+
+            <h2 id="texto-pregunta">
+                Cargando pregunta...
+            </h2>
+
+            <div class="opciones" id="contenedor-opciones"></div>
+
+            <div id="mensaje-respuesta" aria-live="polite">
+                <strong id="titulo-respuesta"></strong>
+                <div id="explicacion-respuesta"></div>
+            </div>
+
+            <div class="pie-pregunta">
+                <span id="ayuda-errores">
+                    Cinco respuestas de cero puntos significan derrota.
+                </span>
+
+                <button
+                    class="boton"
+                    id="boton-siguiente"
+                    onclick="siguientePregunta()">
+                    SIGUIENTE
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DERROTA -->
+
+<section class="pantalla" id="pantalla-derrota">
+    <div class="contenido-final">
+        <p class="etiqueta">Expediente cerrado · Final desconocido</p>
+        <h2>¡HAS SIDO ATRAPADO!</h2>
+
+        <p class="texto-final">
+            Has cometido demasiados errores. El espíritu ha descubierto
+            tu presencia y las puertas de la escuela se han cerrado para siempre.
+        </p>
+
+        <p class="texto-final">
+            Tu escape ha fracasado... pero todavía puedes intentarlo otra vez.
+        </p>
+
+        <div class="resultado-final">
+            Puntuación: <span id="puntos-derrota">0</span>
+        </div>
+
+        <p id="cuenta-derrota" aria-live="polite">
+            EL ESPÍRITU TE HA ATRAPADO...
+        </p>
+
+        <button
+            class="boton"
+            id="boton-reintentar"
+            onclick="volverAIntentar()">
+            VOLVER A INTENTAR
+        </button>
+    </div>
+</section>
+
+<!-- VICTORIA -->
+
+<section class="pantalla" id="pantalla-victoria">
+    <div class="contenido-final">
+        <p class="etiqueta">Expediente resuelto · Final desbloqueado</p>
+        <h2>¡HAS ESCAPADO!</h2>
+
+        <p class="texto-final">
+            Has resuelto los enigmas y encontrado la salida de la escuela.
+            La maldición ha perdido su poder sobre ti.
+        </p>
+
+        <p class="texto-final">
+            El espíritu comienza a desaparecer entre las sombras.
+            Por primera vez en años, la escuela queda en silencio.
+        </p>
+
+        <div class="resultado-final">
+            Puntuación final: <span id="puntos-victoria">0</span>
+        </div>
+
+        <div class="botones-finales">
+            <button
+                class="boton"
+                id="boton-victoria"
+                onclick="volverAIntentar()">
+                JUGAR DE NUEVO
+            </button>
+
+            <button
+                class="boton boton-secundario"
+                onclick="volverAlMenu()">
+                MENÚ PRINCIPAL
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+    function reproducirSonido(id) {
+    const sonido = document.getElementById(id);
+
+    if (sonido) {
+        sonido.currentTime = 0;
+        sonido.play().catch(error => {
+            console.log("No se pudo reproducir el sonido:", error);
+        });
+    }
+}
+/* ========================================
+   1. BANCO DE LAS 15 PREGUNTAS
+   ======================================== */
+
+const preguntas = [
+    {
+        pregunta: "¿Cuál es el propósito del diseño pedagógico?",
+        opciones: [
+            {
+                texto: "Organizar el currículo, los contenidos y las estrategias de enseñanza para favorecer el aprendizaje.",
+                puntos: 10,
+                explicacion: "El diseño pedagógico orienta la planificación de los procesos de enseñanza y aprendizaje."
+            },
+            {
+                texto: "Organizar únicamente las fechas de las actividades escolares.",
+                puntos: 5,
+                explicacion: "La organización de fechas es útil, pero no abarca todos los componentes del diseño pedagógico."
+            },
+            {
+                texto: "Improvisar los contenidos sin establecer objetivos de aprendizaje.",
+                puntos: 0,
+                explicacion: "La enseñanza necesita una planificación con objetivos y estrategias."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Qué importancia tiene el enfoque pedagógico?",
+        opciones: [
+            {
+                texto: "Orientar la manera en que se desarrolla la enseñanza y se promueve el aprendizaje.",
+                puntos: 10,
+                explicacion: "El enfoque pedagógico orienta las decisiones y las prácticas educativas."
+            },
+            {
+                texto: "Determinar exclusivamente las normas de comportamiento de los estudiantes.",
+                puntos: 5,
+                explicacion: "Las normas pueden relacionarse con la convivencia, pero no constituyen el propósito central del enfoque pedagógico."
+            },
+            {
+                texto: "Evitar que los docentes adapten sus estrategias a las necesidades del grupo.",
+                puntos: 0,
+                explicacion: "Las estrategias deben responder a los propósitos educativos y a las necesidades de los estudiantes."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Para qué sirve el plan de estudios?",
+        opciones: [
+            {
+                texto: "Organizar las áreas, los contenidos y los aprendizajes que se desarrollan durante la formación.",
+                puntos: 10,
+                explicacion: "El plan de estudios organiza los componentes curriculares de la institución."
+            },
+            {
+                texto: "Enumerar temas sin relacionarlos con los propósitos educativos.",
+                puntos: 5,
+                explicacion: "Enumerar temas aporta información, pero es necesario organizarlos pedagógicamente."
+            },
+            {
+                texto: "Establecer únicamente las sanciones disciplinarias.",
+                puntos: 0,
+                explicacion: "Las sanciones no son la finalidad del plan de estudios."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Qué caracteriza una planeación pedagógica pertinente?",
+        opciones: [
+            {
+                texto: "Considerar los objetivos de aprendizaje, el contexto y las necesidades de los estudiantes.",
+                puntos: 10,
+                explicacion: "La planeación debe responder a los propósitos educativos y al contexto del alumnado."
+            },
+            {
+                texto: "Copiar una planeación anterior sin revisar si se adapta al grupo actual.",
+                puntos: 5,
+                explicacion: "Una planeación anterior puede servir de referencia, pero necesita revisarse y ajustarse."
+            },
+            {
+                texto: "Realizar actividades sin objetivos ni organización.",
+                puntos: 0,
+                explicacion: "La planeación requiere propósitos y organización."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Cuál es la finalidad de la evaluación de los aprendizajes?",
+        opciones: [
+            {
+                texto: "Identificar avances y dificultades para orientar el aprendizaje y mejorar la enseñanza.",
+                puntos: 10,
+                explicacion: "La evaluación permite reconocer avances y tomar decisiones pedagógicas."
+            },
+            {
+                texto: "Asignar una nota sin analizar el proceso del estudiante.",
+                puntos: 5,
+                explicacion: "La calificación puede ser parte de la evaluación, pero no reemplaza el análisis del aprendizaje."
+            },
+            {
+                texto: "Castigar a los estudiantes que cometen errores.",
+                puntos: 0,
+                explicacion: "La evaluación debe orientar el aprendizaje, no utilizarse como castigo."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Qué debe hacer un docente para mejorar sus estrategias pedagógicas?",
+        opciones: [
+            {
+                texto: "Analizar las necesidades del grupo y seleccionar estrategias adecuadas para alcanzar los aprendizajes.",
+                puntos: 10,
+                explicacion: "Las estrategias deben responder a los objetivos y las necesidades de los estudiantes."
+            },
+            {
+                texto: "Utilizar siempre la misma actividad, aunque no produzca los resultados esperados.",
+                puntos: 5,
+                explicacion: "Una estrategia puede ser útil, pero debe revisarse cuando no favorece el aprendizaje."
+            },
+            {
+                texto: "Evitar cualquier cambio en su manera de enseñar.",
+                puntos: 0,
+                explicacion: "La práctica pedagógica puede mejorarse mediante la reflexión y la adaptación."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Cómo deben utilizarse los recursos educativos?",
+        opciones: [
+            {
+                texto: "Seleccionarlos de acuerdo con los objetivos de aprendizaje y las necesidades del grupo.",
+                puntos: 10,
+                explicacion: "Los recursos deben tener una finalidad pedagógica clara."
+            },
+            {
+                texto: "Utilizarlos solo para entretener a los estudiantes, sin relacionarlos con la clase.",
+                puntos: 5,
+                explicacion: "La motivación es valiosa, pero los recursos deben contribuir al aprendizaje."
+            },
+            {
+                texto: "Elegirlos únicamente porque son novedosos, sin considerar su utilidad.",
+                puntos: 0,
+                explicacion: "La novedad no garantiza que un recurso sea pertinente para enseñar."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Qué implica una buena gestión del aula?",
+        opciones: [
+            {
+                texto: "Organizar el ambiente, las actividades y las interacciones para favorecer la participación y el aprendizaje.",
+                puntos: 10,
+                explicacion: "La gestión del aula busca crear condiciones apropiadas para aprender."
+            },
+            {
+                texto: "Mantener el silencio en todo momento, sin permitir preguntas ni intercambio de ideas.",
+                puntos: 5,
+                explicacion: "El orden puede ser importante, pero la participación también favorece el aprendizaje."
+            },
+            {
+                texto: "Dejar que las actividades se desarrollen sin orientación ni acuerdos.",
+                puntos: 0,
+                explicacion: "El aula necesita orientación, organización y acuerdos de convivencia."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Cuál es el uso pedagógico adecuado de las simulaciones digitales?",
+        opciones: [
+            {
+                texto: "Utilizarlas con una intención didáctica clara para explorar conceptos y comprender fenómenos.",
+                puntos: 10,
+                explicacion: "Las simulaciones son útiles cuando apoyan objetivos concretos de aprendizaje."
+            },
+            {
+                texto: "Usarlas solamente porque hacen que la clase parezca más moderna.",
+                puntos: 5,
+                explicacion: "La tecnología puede motivar, pero necesita estar vinculada con el propósito de la clase."
+            },
+            {
+                texto: "Reemplazar toda explicación y evaluación por simulaciones, sin orientación docente.",
+                puntos: 0,
+                explicacion: "La tecnología no sustituye automáticamente la orientación pedagógica."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Para qué sirve el trabajo colaborativo entre docentes?",
+        opciones: [
+            {
+                texto: "Compartir experiencias, analizar dificultades y acordar acciones para mejorar los procesos educativos.",
+                puntos: 10,
+                explicacion: "La colaboración permite construir estrategias y objetivos comunes."
+            },
+            {
+                texto: "Repartir tareas sin analizar las necesidades de los estudiantes.",
+                puntos: 5,
+                explicacion: "Distribuir tareas puede ayudar, pero la colaboración requiere reflexión pedagógica."
+            },
+            {
+                texto: "Evitar compartir información y trabajar sin coordinación.",
+                puntos: 0,
+                explicacion: "La falta de coordinación dificulta el mejoramiento institucional."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Cómo debe utilizarse la información sobre el desempeño académico?",
+        opciones: [
+            {
+                texto: "Analizarla para identificar dificultades, reconocer avances y tomar decisiones de mejoramiento.",
+                puntos: 10,
+                explicacion: "La información académica debe orientar decisiones pedagógicas."
+            },
+            {
+                texto: "Guardarla en los registros sin utilizarla para mejorar la enseñanza.",
+                puntos: 5,
+                explicacion: "Registrar información es importante, pero también debe servir para tomar decisiones."
+            },
+            {
+                texto: "Ignorar los resultados y continuar sin revisar las dificultades.",
+                puntos: 0,
+                explicacion: "Ignorar los resultados impide identificar necesidades de mejoramiento."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Qué debe hacerse cuando un estudiante necesita apoyos adicionales?",
+        opciones: [
+            {
+                texto: "Identificar sus necesidades y proporcionar apoyos pertinentes para favorecer su participación y aprendizaje.",
+                puntos: 10,
+                explicacion: "Los apoyos deben responder a las necesidades particulares del estudiante."
+            },
+            {
+                texto: "Ofrecerle actividades adicionales sin revisar qué dificultades presenta.",
+                puntos: 5,
+                explicacion: "Las actividades adicionales pueden ayudar, pero deben responder a las necesidades identificadas."
+            },
+            {
+                texto: "Excluirlo de las actividades porque aprende de manera diferente.",
+                puntos: 0,
+                explicacion: "Las diferencias en el aprendizaje no justifican la exclusión."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Cuál es el propósito del seguimiento académico?",
+        opciones: [
+            {
+                texto: "Revisar periódicamente los avances de los estudiantes y establecer acciones de apoyo cuando sean necesarias.",
+                puntos: 10,
+                explicacion: "El seguimiento permite identificar oportunamente dificultades y avances."
+            },
+            {
+                texto: "Revisar el rendimiento únicamente al terminar el año escolar.",
+                puntos: 5,
+                explicacion: "La revisión final aporta información, pero el seguimiento debe realizarse durante el proceso."
+            },
+            {
+                texto: "Esperar a que el estudiante pierda el año para identificar sus dificultades.",
+                puntos: 0,
+                explicacion: "Las dificultades deben detectarse oportunamente para poder intervenir."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Qué debe hacer la institución cuando detecta ausencias frecuentes y bajo rendimiento?",
+        opciones: [
+            {
+                texto: "Analizar la situación, comunicarse con los responsables cuando corresponda y establecer acciones de acompañamiento.",
+                puntos: 10,
+                explicacion: "La situación requiere seguimiento y acciones de apoyo oportunas."
+            },
+            {
+                texto: "Registrar las ausencias y esperar hasta el final del periodo para actuar.",
+                puntos: 5,
+                explicacion: "El registro es necesario, pero conviene actuar oportunamente."
+            },
+            {
+                texto: "Ignorar las ausencias y atribuir el bajo rendimiento únicamente a la falta de interés.",
+                puntos: 0,
+                explicacion: "Es necesario analizar las causas antes de tomar decisiones."
+            }
+        ]
+    },
+    {
+        pregunta: "¿Cómo se comprueba si las acciones de seguimiento académico están funcionando?",
+        opciones: [
+            {
+                texto: "Revisando las evidencias de aprendizaje, los avances y los resultados después de aplicar las acciones.",
+                puntos: 10,
+                explicacion: "El seguimiento debe permitir valorar los resultados y ajustar las acciones."
+            },
+            {
+                texto: "Comprobando únicamente que se realizaron las reuniones y actividades programadas.",
+                puntos: 5,
+                explicacion: "Cumplir las actividades es importante, pero no demuestra por sí solo que mejoró el aprendizaje."
+            },
+            {
+                texto: "Dando por terminado el proceso sin revisar los resultados.",
+                puntos: 0,
+                explicacion: "Sin revisar los resultados, no es posible determinar si las acciones fueron efectivas."
+            }
+        ]
+    }
+];
+
+/* ========================================
+   2. VARIABLES DEL JUEGO
+   ======================================== */
+
+let puntos = 0;
+let errores = 0;
+let indicePregunta = 0;
+let preguntasJugables = [];
+let respuestaSeleccionada = false;
+let partidaTerminada = false;
+let temporizadorHistoria = null;
+let temporizadorDerrota = null;
+
+/* ========================================
+   3. FUNCIONES GENERALES
+   ======================================== */
+
+function mostrarPantalla(id) {
+    document.querySelectorAll(".pantalla").forEach(pantalla => {
+        pantalla.classList.remove("activa");
+    });
+
+    document.getElementById(id).classList.add("activa");
+    window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function mezclar(array) {
+    const copia = [...array];
+
+    for (let i = copia.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copia[i], copia[j]] = [copia[j], copia[i]];
+    }
+
+    return copia;
+}
+
+/* ========================================
+   4. MENU E HISTORIA
+   ======================================== */
+function entrarSala() {
+    clearTimeout(temporizadorHistoria);
+    mostrarPantalla("sala-espera");
+}
+function iniciarJuego() {
+    socket.emit("iniciar-partida");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const botonAnfitrion = document.getElementById(
+        "boton-iniciar-anfitrion"
+    );
+
+    if (botonAnfitrion) {
+        botonAnfitrion.addEventListener("click", iniciarJuego);
+    }
+
+});
+function mostrarHistoria() {
+    clearTimeout(temporizadorHistoria);
+
+    mostrarPantalla("historia");
+ reproducirSonido("sonidoEscoger");
+
+    const boton = document.getElementById("boton-partida");
+    boton.style.display = "none";
+
+    temporizadorHistoria = setTimeout(() => {
+        boton.style.display = "inline-block";
+    }, 8000);
+}
+
+/* ========================================
+   5. INICIAR PARTIDA
+   ======================================== */
+
+function iniciarPartida() {
+    clearTimeout(temporizadorHistoria);
+    clearTimeout(temporizadorDerrota);
+
+    puntos = 0;
+    errores = 0;
+    indicePregunta = 0;
+    respuestaSeleccionada = false;
+    partidaTerminada = false;
+
+    // Mezcla las 15 preguntas en cada nueva partida.
+    preguntasJugables = mezclar(preguntas);
+
+    actualizarEstadisticas();
+    mostrarPantalla("pantalla-juego");
+    reproducirSonido("sonidoEscoger");
+    mostrarPregunta();
+}
+
+/* ========================================
+   6. MOSTRAR PREGUNTAS
+   ======================================== */
+
+function mostrarPregunta() {
+    if (partidaTerminada) return;
+
+    if (indicePregunta >= preguntasJugables.length) {
+        finalizarPartida();
+        return;
+    }
+
+    respuestaSeleccionada = false;
+
+    const preguntaActual = preguntasJugables[indicePregunta];
+
+    document.getElementById("numero-pregunta").textContent =
+        `EXPEDIENTE 001 · PREGUNTA ${String(indicePregunta + 1).padStart(2, "0")}`;
+
+    document.getElementById("texto-pregunta").textContent =
+        preguntaActual.pregunta;
+
+    const contenedor = document.getElementById("contenedor-opciones");
+    contenedor.innerHTML = "";
+
+    const opcionesMezcladas = mezclar(preguntaActual.opciones);
+
+    opcionesMezcladas.forEach((opcion, i) => {
+        const boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "opcion";
+
+        const letra = document.createElement("span");
+        letra.className = "letra-opcion";
+        letra.textContent = String.fromCharCode(65 + i);
+
+        const texto = document.createElement("span");
+        texto.textContent = opcion.texto;
+
+        boton.appendChild(letra);
+        boton.appendChild(texto);
+
+        boton.addEventListener("click", () => {
+            seleccionarRespuesta(opcion, boton);
+        });
+
+        contenedor.appendChild(boton);
+    });
+
+    const mensaje = document.getElementById("mensaje-respuesta");
+    mensaje.className = "";
+    mensaje.style.display = "none";
+
+    document.getElementById("titulo-respuesta").textContent = "";
+    document.getElementById("explicacion-respuesta").textContent = "";
+
+    document.getElementById("boton-siguiente").style.display = "none";
+
+    actualizarEstadisticas();
+}
+
+/* ========================================
+   7. EVALUAR RESPUESTA
+   ======================================== */
+
+function seleccionarRespuesta(opcionElegida, botonElegido) {
+    if (respuestaSeleccionada || partidaTerminada) return;
+
+    respuestaSeleccionada = true;
+
+    puntos += opcionElegida.puntos;
+reproducirSonido("sonidoEscoger");
+    if (opcionElegida.puntos === 0) {
+        errores++;
+    }
+// Enviar el progreso individual al servidor
+socket.emit("actualizar-progreso", {
+    respondidas: indicePregunta + 1,
+    puntos: puntos,
+    errores: errores
+});
+    // Bloquear todas las opciones para evitar respuestas repetidas.
+    document.querySelectorAll(".opcion").forEach(boton => {
+        boton.disabled = true;
+    });
+
+    if (opcionElegida.puntos === 10) {
+        botonElegido.classList.add("seleccionada-10");
+    } else if (opcionElegida.puntos === 5) {
+        botonElegido.classList.add("seleccionada-5");
+    } else {
+        botonElegido.classList.add("seleccionada-0");
+    }
+
+    const mensaje = document.getElementById("mensaje-respuesta");
+    const titulo = document.getElementById("titulo-respuesta");
+    const explicacion = document.getElementById("explicacion-respuesta");
+
+    mensaje.style.display = "block";
+    mensaje.className = "visible";
+
+    if (opcionElegida.puntos === 10) {
+        mensaje.classList.add("correcta");
+        titulo.textContent = "¡Excelente! +10 puntos";
+    } else if (opcionElegida.puntos === 5) {
+        mensaje.classList.add("parcial");
+        titulo.textContent = "Respuesta parcialmente adecuada. +5 puntos";
+    } else {
+        mensaje.classList.add("incorrecta");
+        titulo.textContent = "Respuesta incorrecta. +0 puntos";
+    }
+
+    explicacion.textContent = opcionElegida.explicacion;
+
+    actualizarEstadisticas();
+
+    // Cinco respuestas de cero puntos provocan derrota inmediata.
+    if (errores >= 5) {
+        setTimeout(mostrarDerrota, 1200);
+        return;
+    }
+
+    const botonSiguiente = document.getElementById("boton-siguiente");
+
+    if (indicePregunta === preguntasJugables.length - 1) {
+        botonSiguiente.textContent = "VER RESULTADO";
+    } else {
+        botonSiguiente.textContent = "SIGUIENTE";
+    }
+
+    botonSiguiente.style.display = "inline-block";
+}
+
+/* ========================================
+   8. ACTUALIZAR PUNTOS Y PROGRESO
+   ======================================== */
+
+function actualizarEstadisticas() {
+    document.getElementById("marcador-puntos").textContent = puntos;
+    document.getElementById("marcador-errores").textContent = `${errores}/5`;
+    document.getElementById("marcador-numero").textContent =
+        `${Math.min(indicePregunta + 1, 15)}/15`;
+
+    const respondidas = indicePregunta + (respuestaSeleccionada ? 1 : 0);
+    const progreso = Math.min((respondidas / preguntasJugables.length) * 100, 100);
+
+    document.getElementById("barra-progreso").style.width = `${progreso}%`;
+
+    document.getElementById("progreso-accesible").setAttribute(
+        "aria-valuenow",
+        Math.min(respondidas, 15)
+    );
+}
+
+/* ========================================
+   9. SIGUIENTE PREGUNTA
+   ======================================== */
+
+function siguientePregunta() {
+    if (!respuestaSeleccionada || partidaTerminada) return;
+
+    indicePregunta++;
+
+    if (indicePregunta >= preguntasJugables.length) {
+        finalizarPartida();
+        return;
+    }
+
+    mostrarPregunta();
+}
+
+/* ========================================
+   10. VICTORIA O DERROTA POR PUNTOS
+   ======================================== */
+
+function finalizarPartida() {
+    if (partidaTerminada) return;
+
+    partidaTerminada = true;
+
+    if (puntos >= 100) {
+        document.getElementById("puntos-victoria").textContent = puntos;
+        document.getElementById("boton-victoria").style.display = "inline-block";
+        reproducirSonido("sonidoVictoria");
+        mostrarPantalla("pantalla-victoria");
+    } else {
+        mostrarDerrotaPorPuntuacion();
+    }
+}
+
+function mostrarDerrotaPorPuntuacion() {
+    partidaTerminada = true;
+reproducirSonido("sonidoPerder");
+    document.querySelector("#pantalla-derrota h2").textContent =
+        "NO HAS LOGRADO ESCAPAR";
+
+    document.querySelector("#pantalla-derrota .texto-final").textContent =
+        "Has terminado las 15 preguntas, pero no has alcanzado los 100 puntos necesarios para salir de la escuela.";
+
+    document.querySelectorAll("#pantalla-derrota .texto-final")[1].textContent =
+        "Estudia los conceptos, inténtalo de nuevo y encuentra la salida.";
+
+    document.getElementById("puntos-derrota").textContent = puntos;
+    document.getElementById("cuenta-derrota").textContent =
+        "PREPÁRATE PARA VOLVER A INTENTARLO...";
+
+    document.getElementById("boton-reintentar").style.display = "inline-block";
+
+    mostrarPantalla("pantalla-derrota");
+}
+
+function mostrarDerrota() {
+    if (partidaTerminada) return;
+reproducirSonido("sonidoPerder");
+    partidaTerminada = true;
+
+    clearTimeout(temporizadorDerrota);
+
+    document.querySelector("#pantalla-derrota h2").textContent =
+        "¡HAS SIDO ATRAPADO!";
+
+    document.querySelector("#pantalla-derrota .texto-final").textContent =
+        "Has cometido cinco errores sin obtener puntos. El espíritu ha descubierto tu presencia y las puertas de la escuela se han cerrado.";
+
+    document.querySelectorAll("#pantalla-derrota .texto-final")[1].textContent =
+        "Tu escape ha fracasado... pero todavía puedes intentarlo otra vez.";
+
+    document.getElementById("puntos-derrota").textContent = puntos;
+
+    const boton = document.getElementById("boton-reintentar");
+    const cuenta = document.getElementById("cuenta-derrota");
+
+    boton.style.display = "none";
+    cuenta.textContent = "EL ESPÍRITU TE HA ATRAPADO...";
+
+    mostrarPantalla("pantalla-derrota");
+
+    temporizadorDerrota = setTimeout(() => {
+        if (!partidaTerminada) return;
+
+        cuenta.textContent = "TIENES UNA SEGUNDA OPORTUNIDAD.";
+        boton.style.display = "inline-block";
+    }, 5000);
+}
+
+/* ========================================
+   11. VOLVER A INTENTAR Y VOLVER AL MENU
+   ======================================== */
+
+function volverAIntentar() {
+    clearTimeout(temporizadorDerrota);
+    clearTimeout(temporizadorHistoria);
+
+    document.getElementById("boton-partida").style.display = "inline-block";
+
+    mostrarPantalla("historia");
+}
+
+function volverAlMenu() {
+    clearTimeout(temporizadorDerrota);
+    clearTimeout(temporizadorHistoria);
+
+    mostrarPantalla("menu-principal");
+     reproducirSonido("sonidoEscoger");
+
+}
+// ===================================
+// SELECCIÓN DE LOS 30 PERSONAJES
+// ===================================
+
+let personajeSeleccionado = null;
+
+const totalPersonajes = 30;
+
+// Crear las tarjetas de personajes
+function cargarPersonajes() {
+
+    const contenedor = document.getElementById(
+        "seleccion-personajes"
+    );
+
+    contenedor.innerHTML = "";
+
+    for (let i = 1; i <= totalPersonajes; i++) {
+
+        const tarjeta = document.createElement("button");
+
+        tarjeta.type = "button";
+        tarjeta.className = "tarjeta-personaje";
+
+        tarjeta.innerHTML = `
+            <img
+                src="imagenes/per/per ${i}.png"
+                alt="Personaje ${i}"
+            >
+
+            <p>PERSONAJE ${i}</p>
+        `;
+
+        tarjeta.addEventListener("click", () => {
+            elegirPersonaje(i);
+        });
+
+        contenedor.appendChild(tarjeta);
+    }
+}
+
+// Seleccionar un personaje
+function elegirPersonaje(numero) {
+const tarjeta = document.querySelectorAll(".tarjeta-personaje")[numero - 1];
+
+if (tarjeta.classList.contains("ocupado")) {
+    document.getElementById("estado-sala").textContent =
+        "Este personaje ya está ocupado. Escoge otro.";
+    return;
+}
+    personajeSeleccionado = numero;
+
+    const tarjetas = document.querySelectorAll(
+        ".tarjeta-personaje"
+    );
+
+    tarjetas.forEach(tarjeta => {
+        tarjeta.classList.remove("seleccionado");
+    });
+
+    tarjetas[numero - 1].classList.add("seleccionado");
+
+    document.getElementById(
+        "personaje-elegido"
+    ).textContent = `Has seleccionado el PERSONAJE ${numero}`;
+}
+
+// Cargar personajes al abrir la página
+cargarPersonajes();
+</script>
+<audio id="sonidoPerder" src="sonido/perder.mp3" preload="auto"></audio>
+<audio id="sonidoVictoria" src="sonido/victoria.mp3" preload="auto"></audio>
+<audio id="sonidoEscoger" src="sonido/escoger.mp3" preload="auto"></audio>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+// Mostrar el panel exclusivo del anfitrión
+socket.on("anfitrion-actual", (anfitrionId) => {
+
+    if (socket.id === anfitrionId) {
+
+        document.getElementById("pantalla-anfitrion").style.display = "block";
+
+    } else {
+
+        document.getElementById("pantalla-anfitrion").style.display = "none";
+
+    }
+
+});
+    socket.on("connect", () => {
+        console.log("Conectado al servidor de Escape School");
+    });
+
+   const formulario = document.getElementById("formulario-ingreso");
+
+formulario.addEventListener("submit", (event) => {
+
+    event.preventDefault();
+
+    const nombre = document.getElementById(
+        "nombre-jugador"
+    ).value.trim();
+
+    if (nombre === "") {
+        return;
+    }
+
+    if (personajeSeleccionado === null) {
+        document.getElementById("estado-sala").textContent =
+            "¡Primero debes escoger un personaje!";
+        return;
+    }
+
+    if (!socket.connected) {
+        document.getElementById("estado-sala").textContent =
+            "No hay conexión con el servidor.";
+        return;
+    }
+
+    socket.emit("ingresar-jugador", {
+        nombre: nombre,
+        personaje: personajeSeleccionado
+    });
+
+    formulario.querySelector("button").disabled = true;
+
+    document.getElementById("estado-sala").textContent =
+        "Te has unido. Esperando al anfitrión...";
+});
+
+socket.on("lista-jugadores", (jugadores) => {
+
+    window.jugadoresActuales = jugadores;
+
+    // Lista de la sala de espera
+    const lista = document.getElementById("lista-jugadores");
+
+    if (lista) {
+        lista.innerHTML = "";
+    }
+
+    // Lista del panel del administrador
+    const listaAnfitrion = document.getElementById("lista-jugadores-anfitrion");
+
+    if (listaAnfitrion) {
+        listaAnfitrion.innerHTML = "";
+
+        if (jugadores.length === 0) {
+            listaAnfitrion.innerHTML = "<p>Esperando jugadores...</p>";
+        }
+    }
+
+    jugadores.forEach((jugador) => {
+
+        // Mostrar jugador en la sala de espera
+        if (lista) {
+
+            const elemento = document.createElement("li");
+            elemento.className = "jugador-item";
+
+            const imagen = document.createElement("img");
+            imagen.src = `imagenes/per/per ${jugador.personaje}.png`;
+            imagen.alt = `Personaje ${jugador.personaje}`;
+
+            const nombre = document.createElement("span");
+            nombre.textContent = jugador.nombre;
+
+            if (jugador.id === window.anfitrionActual) {
+                nombre.textContent += " 👑 ANFITRIÓN";
+                elemento.classList.add("jugador-anfitrion");
+            }
+
+            elemento.appendChild(imagen);
+            elemento.appendChild(nombre);
+
+            lista.appendChild(elemento);
+        }
+
+        // Mostrar jugador en el panel del administrador
+        if (listaAnfitrion) {
+
+            const elementoAnfitrion = document.createElement("p");
+
+            elementoAnfitrion.textContent =
+                `${jugador.nombre} - Personaje ${jugador.personaje}`;
+
+            listaAnfitrion.appendChild(elementoAnfitrion);
+        }
+
+    });
+
+});
+socket.on("progreso-jugadores", (jugadores) => {
+
+    const lista = document.getElementById("lista-jugadores-anfitrion");
+
+    if (!lista) return;
+
+    lista.innerHTML = "";
+
+    jugadores.forEach(jugador => {
+
+        const porcentaje = Math.min(
+            (jugador.respondidas / 15) * 100,
+            100
+        );
+
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "progreso-jugador";
+
+        tarjeta.innerHTML = `
+            <h3>${jugador.nombre}</h3>
+
+            <p>Preguntas: ${jugador.respondidas}/15</p>
+
+            <div class="barra-progreso-jugador">
+                <div style="width: ${porcentaje}%"></div>
+            </div>
+
+            <p>Puntos: ${jugador.puntos}</p>
+            <p>Errores: ${jugador.errores}/5</p>
+        `;
+
+        lista.appendChild(tarjeta);
+
+    });
+
+});
+socket.on("anfitrion-actual", (anfitrionId) => {
+window.anfitrionActual = anfitrionId;
+const botonIniciar = document.getElementById("boton-iniciar-juego");
+
+if (botonIniciar) {
+    botonIniciar.style.display =
+        socket.id === anfitrionId ? "inline-block" : "none";
+}
+    const anfitrion = window.jugadoresActuales?.find(
+        jugador => jugador.id === anfitrionId
+    );
+
+    const nombreAnfitrion = document.getElementById("nombre-anfitrion");
+
+    if (anfitrion) {
+        nombreAnfitrion.textContent = "👑 " + anfitrion.nombre;
+    } else {
+        nombreAnfitrion.textContent = "Esperando anfitrión...";
+    }
+
+});
+socket.on("partida-iniciada", () => {
+
+    // El anfitrión no debe responder preguntas
+    if (socket.id === window.anfitrionActual) {
+        return;
+    }
+
+    console.log("¡La partida ha comenzado! Recibí la señal del servidor.");
+
+    iniciarPartida();
+
+
+});
+socket.on("personajes-ocupados", (personajes) => {
+    const tarjetas = document.querySelectorAll(".tarjeta-personaje");
+
+    tarjetas.forEach((tarjeta, indice) => {
+        const numeroPersonaje = indice + 1;
+
+        if (personajes.includes(numeroPersonaje)) {
+            tarjeta.classList.add("ocupado");
+        } else {
+            tarjeta.classList.remove("ocupado");
+        }
+    });
+});
+socket.on("error-ingreso", (mensaje) => {
+    document.getElementById("estado-sala").textContent = mensaje;
+});
+</script>
+<!-- PANEL EXCLUSIVO DEL ANFITRIÓN -->
+<div id="pantalla-anfitrion" style="
+    display: none;
+    min-height: 100vh;
+    padding: 30px;
+    box-sizing: border-box;
+    background: #09090d;
+    color: white;
+    font-family: Arial, sans-serif;
+    position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100vh;
+z-index: 9999;
+overflow-y: auto;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100vh;
+z-index: 9999;
+overflow-y: auto;
+">
+
+    <h1 style="color: #b51f2b; text-align: center;">
+        ESCAPE SCHOOL
+    </h1>
+
+    <h2 style="text-align: center;">
+        Panel de administración
+    </h2>
+
+    <p style="text-align: center; color: #aaa;">
+        Sala exclusiva del anfitrión
+    </p>
+
+    <hr style="border-color: #690e18;">
+
+    <h3>Jugadores conectados</h3>
+
+    <div id="lista-jugadores-anfitrion">
+        <p>Esperando jugadores...</p>
+    </div>
+
+    <h3>Progreso de la partida</h3>
+
+    <p>Estado: <span id="estado-partida-anfitrion">Esperando inicio</span></p>
+
+
+    <button
+        id="boton-iniciar-anfitrion"
+        type="button"
+        style="
+            display: block;
+            padding: 12px 25px;
+            background: #b51f2b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        "
+    >
+        INICIAR PARTIDA
+    </button>
+
+</div>
+</body>
+</html>
